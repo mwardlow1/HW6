@@ -1,7 +1,7 @@
 
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Michael Wardlow / 001
  *
  *   This java file contains the problem solutions for the methods lastBoulder,
  *   showDuplicates, and pair methods. You should utilize the Java Collection
@@ -68,7 +68,28 @@ public class ProblemSolutions {
       //
       // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME / SECTION # ABOVE
       //
-      return -1;
+
+
+      PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());  // Max Heap (PriorityQueue with reverse order)
+
+
+      for (int boulder : boulders) {
+        pq.add(boulder);        // Add all boulders to the Max Heap
+      }
+
+
+      while (pq.size() > 1) {       // Process game with at least 2 boulders
+        int heaviest = pq.poll();   // Remove the largest boulder
+        int secondHeaviest = pq.poll();     // Remove the second largest boulder
+
+        // if they aren't equal, add the difference back into the heap
+        if (heaviest != secondHeaviest) {       
+            pq.add(heaviest - secondHeaviest);      
+        }
+      }
+
+
+      return pq.isEmpty() ? 0 : pq.peek();      // return the last boulder, or 0 if none are left
   }
 
 
@@ -94,7 +115,23 @@ public class ProblemSolutions {
         //
         //  YOUR CODE GOES HERE
         //
-        return new ArrayList<>();  // Make sure result is sorted in ascending order
+
+        HashMap<String, Integer> countMap = new HashMap<>();
+        ArrayList<String> result = new ArrayList<>();       // Array list to store the duplicate strings
+
+        for (String str : input) {      // If the string is already in the map, increment its count
+            countMap.put(str, countMap.getOrDefault(str, 0) + 1);       // Otherwise, add it to the map with an initial count of 1
+        }
+
+        for (Map.Entry<String, Integer> entry : countMap.entrySet()) {
+            if (entry.getValue() > 1) {             // There is a duplicate if the string has a count greater than 1
+                result.add(entry.getKey());     // Add to the result list
+            }
+        }
+
+        Collections.sort(result);       // Sort the result list
+
+        return result; // Result is sorted in ascending order
 
     }
 
@@ -134,6 +171,24 @@ public class ProblemSolutions {
         //
         //  YOUR CODE GOES HERE
         //
-        return new ArrayList<>();  // Make sure returned lists is sorted as indicated above
+
+        HashSet<Integer> seen = new HashSet<>();    // HashSet to store unique numbers
+
+        TreeSet<String> pairs = new TreeSet<>();    // TreeSet to store the pairs as strings
+
+        for (int num : input) {
+            int complement = k - num;   // Find the number needed to form a pair: (num)
+
+            if (seen.contains(complement)) {    // Check if the complement is already in the set
+                // Ordering within a pair
+                int first = Math.min(num, complement);
+                int second = Math.max(num, complement);
+                pairs.add("(" + first + ", " + second + ")");   // Add pair as a formatted string
+            }
+
+            seen.add(num);  // Add the current number to the set
+        }
+
+        return new ArrayList<>(pairs);  // Convert to an ArrayList and return, list is sorted as indicated above
     }
 }

@@ -1,7 +1,7 @@
 
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Michael Wardlow / 001
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -152,7 +152,15 @@ class PriorityQueue<E, P> {
     public Node add(E e, P priority) {
 
         // YOUR CODE GOES HERE
-        return null;
+
+
+        Node newNode = new Node(e, priority, tree.size());
+
+        tree.add(newNode);      // Add node to the end of the heap list (right most leaf)
+
+        pullUp(tree.size()-1);  // Compare the new node's prioirty with its parent and swaps
+
+        return newNode;     // Return reference to the inserted node
     }
 
 
@@ -169,7 +177,14 @@ class PriorityQueue<E, P> {
     public boolean contains(E e) {
 
         // ADD YOUR CODE HERE
-        return false;
+
+
+        for (Node node : tree) {        // Loop through eahc node in the heap
+            if (node.value().equals(e)) {   // Compare target element with the node's value
+                return true;        // if it's a match, return true
+            }
+        }
+        return false;       // false if no matching element found
     }
 
 
